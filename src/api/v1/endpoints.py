@@ -1,6 +1,6 @@
 import re
 
-from pathlib import Path
+from pathlib import Path as SysPath
 
 from uuid import uuid4
 
@@ -223,9 +223,8 @@ def download_file(
     """Download the PDF file associated with a job."""
 
     job = load_job(redis_client, job_id)
-    file_path = settings.uploaded_files / f"{job.filename}_{job_id}.pdf"
 
-    if not job or not Path(file_path).exists():
+    if not job or not SysPath((file_path := settings.uploaded_files / f"{job.filename}_{job_id}.pdf")).exists():
         raise HTTPException(status_code=404, detail="File not found.")
 
     return FileResponse(file_path, filename=job.filename, media_type="application/pdf")

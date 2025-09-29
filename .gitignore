@@ -1,0 +1,15 @@
+.env
+.env.prod
+
+GeoLite2-City.mmdb
+
+uploaded_files/*
+
+__pycache__/
+.idea/
+
+logs/
+
+certs/
+
+schedule.db

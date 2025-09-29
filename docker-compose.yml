@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-app-test
+    depends_on:
+      - redis
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app/
+    command: sh -c "gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.main:app --bind 0.0.0.0:3000"
+  celery:
+    build:
+      context: .
+    command: celery -A src.core.celery_conf worker --loglevel=info
+    depends_on:
+      - redis
+  redis:
+    image: redis:7
+    container_name: redis-test
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data-test:/data
+
+volumes:
+  redis-data-test:
